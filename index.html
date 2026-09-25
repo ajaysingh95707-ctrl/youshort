@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>YouShort - The Perfect Edition</title>
+    <title>YouShort - The Futuristic Edition</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,9 +15,19 @@
             theme: {
                 extend: {
                     colors: {
-                        neonCyan: '#00f3ff', neonPurple: '#bc13fe', instaBlue: '#0095F6', darkBg: '#050505',
+                        neonCyan: '#00f3ff', 
+                        neonPurple: '#bc13fe', 
+                        instaBlue: '#0095F6', 
+                        darkBg: '#050505',
+                        cyberGray: '#12121a'
                     },
-                    fontFamily: { space: ['Space Grotesk', 'sans-serif'], inter: ['Inter', 'sans-serif'], }
+                    fontFamily: { 
+                        space: ['Space Grotesk', 'sans-serif'], 
+                        inter: ['Inter', 'sans-serif'], 
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
                 }
             }
         }
@@ -25,19 +35,33 @@
 
     <style>
         :root { --safe-area-inset-top: env(safe-area-inset-top, 0px); --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px); }
-        body, html { margin: 0; padding: 0; background-color: #000; color: white; font-family: 'Inter', sans-serif; overscroll-behavior-y: none; height: 100dvh; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+        body, html { margin: 0; padding: 0; background-color: #050505; color: white; font-family: 'Inter', sans-serif; overscroll-behavior-y: none; height: 100dvh; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+        
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
         .snap-y-container { scroll-snap-type: y mandatory; overflow-y: scroll; height: 100dvh; padding-bottom: 70px;}
         .snap-item { scroll-snap-align: start; scroll-snap-stop: always; height: 100dvh; position: relative; }
-        .bottom-gradient { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 50%, transparent 100%); }
-        .top-gradient { background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.2) 60%, transparent 100%); }
-        .cyber-input { background: rgba(20, 20, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
-        .cyber-input:focus { border-color: #00f3ff; outline: none; background: rgba(0, 0, 0, 0.9); }
         
-        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
-        .like-pop { animation: pop 0.3s ease-in-out; color: #ff2b2b !important; }
-        .bottom-sheet { transform: translateY(100%); transition: transform 0.3s ease-in-out; }
+        .bottom-gradient { background: linear-gradient(to top, rgba(5,5,5,1) 0%, rgba(5,5,5,0.6) 50%, transparent 100%); }
+        .top-gradient { background: linear-gradient(to bottom, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.2) 60%, transparent 100%); }
+        
+        /* Futuristic UI Elements */
+        .cyber-input { background: rgba(20, 20, 30, 0.8); border: 1px solid rgba(0, 243, 255, 0.2); transition: all 0.3s ease; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        .cyber-input:focus { border-color: #00f3ff; outline: none; background: rgba(10, 10, 15, 0.9); box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); }
+        
+        .neon-text { text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4); }
+        .neon-border { border: 1px solid #00f3ff; box-shadow: 0 0 10px rgba(0,243,255,0.3); }
+        
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+        .like-pop { animation: pop 0.3s ease-in-out; color: #ff2b2b !important; filter: drop-shadow(0 0 10px rgba(255,43,43,0.6)); }
+        
+        @keyframes typing { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+        .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        .bottom-sheet { transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .bottom-sheet.open { transform: translateY(0); }
     </style>
 </head>
@@ -46,62 +70,68 @@
     <!-- HIDDEN UPLOAD INPUTS -->
     <input type="file" id="avatar-upload" class="hidden" accept="image/*" onchange="updateProfileImage(event, 'avatar')">
     <input type="file" id="banner-upload" class="hidden" accept="image/*" onchange="updateProfileImage(event, 'banner')">
+    <input type="file" id="doc-upload" class="hidden" accept="image/*,application/pdf" onchange="alertMsg('Document Attached Successfully!')">
 
     <!-- Splash Screen -->
-    <div id="splash-screen" class="absolute inset-0 z-[200] bg-black flex flex-col items-center justify-center transition-opacity duration-700">
-        <div class="relative mb-6"><i class="fa-solid fa-microchip text-6xl text-neonCyan drop-shadow-[0_0_30px_rgba(0,243,255,0.9)] animate-pulse"></i></div>
-        <h1 class="font-space font-bold text-4xl tracking-[0.2em] text-white mb-2">YOUSHORT</h1>
+    <div id="splash-screen" class="absolute inset-0 z-[200] bg-darkBg flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="relative mb-6">
+            <i class="fa-solid fa-microchip text-7xl text-neonCyan drop-shadow-[0_0_30px_rgba(0,243,255,0.9)] animate-pulse-fast"></i>
+            <div class="absolute inset-0 border-2 border-neonPurple rounded-full animate-ping opacity-50"></div>
+        </div>
+        <h1 class="font-space font-bold text-5xl tracking-[0.2em] text-white mb-2 neon-text">YOUSHORT</h1>
+        <p class="text-neonPurple font-space tracking-widest text-xs">F U T U R E  O F  S H O R T S</p>
     </div>
 
     <!-- Auth Screen -->
     <div id="auth-screen" class="hidden absolute inset-0 z-[190] bg-darkBg overflow-y-auto" style="padding-top: max(2rem, var(--safe-area-inset-top));">
         <div id="auth-home" class="flex flex-col items-center justify-center h-full px-6 transition-all">
+            <i class="fa-solid fa-fingerprint text-5xl text-neonCyan mb-6 drop-shadow-[0_0_15px_rgba(0,243,255,0.5)]"></i>
             <h1 class="font-space font-bold text-3xl tracking-[0.1em] text-white mb-10">YOUSHORT</h1>
-            <button onclick="showAuthSection('auth-login')" class="w-full py-3.5 rounded-full bg-instaBlue text-white font-bold mb-4">Log in</button>
-            <button onclick="showAuthSection('auth-signup-step1')" class="w-full py-3.5 rounded-full border border-gray-600 text-white font-bold hover:bg-gray-900">Create new account</button>
+            <button onclick="showAuthSection('auth-login')" class="w-full py-3.5 rounded-full bg-neonCyan text-black font-bold mb-4 shadow-[0_0_15px_rgba(0,243,255,0.4)]">Initialize Login</button>
+            <button onclick="showAuthSection('auth-signup-step1')" class="w-full py-3.5 rounded-full border border-neonPurple text-white font-bold hover:bg-neonPurple/20 transition-colors shadow-[0_0_15px_rgba(188,19,254,0.2)]">Create Neural Account</button>
         </div>
 
         <div id="auth-login" class="hidden flex-col h-full px-6 pt-10">
             <button onclick="showAuthSection('auth-home')" class="text-white text-2xl mb-8"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 class="text-2xl font-bold text-white mb-6">Welcome Back</h2>
+            <h2 class="text-2xl font-bold text-white mb-6 font-space">System Access</h2>
             <div class="space-y-4 mb-6">
-                <input type="text" id="login-identifier" placeholder="Username (e.g. @ajay)" class="cyber-input w-full rounded-lg p-4 text-white text-sm">
-                <input type="password" id="login-password" placeholder="Password" class="cyber-input w-full rounded-lg p-4 text-white text-sm">
+                <input type="text" id="login-identifier" placeholder="Username (e.g. @cyber_ajay)" class="cyber-input w-full rounded-lg p-4 text-white text-sm">
+                <input type="password" id="login-password" placeholder="Passcode" class="cyber-input w-full rounded-lg p-4 text-white text-sm">
             </div>
-            <button onclick="processLogin()" class="w-full py-3.5 rounded-full bg-instaBlue text-white font-bold mb-4">Log in</button>
-            <p id="login-error" class="text-red-500 text-xs hidden font-bold text-center mb-4">Incorrect Username or Password.</p>
+            <button onclick="processLogin()" class="w-full py-3.5 rounded-full bg-neonCyan text-black font-bold mb-4">Authenticate</button>
+            <p id="login-error" class="text-red-500 text-xs hidden font-bold text-center mb-4">Access Denied: Incorrect Credentials.</p>
         </div>
 
         <!-- Signup Steps -->
         <div id="auth-signup-step1" class="hidden flex-col h-full px-6 pt-10">
             <button onclick="showAuthSection('auth-home')" class="text-white text-2xl mb-8"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 class="text-2xl font-bold text-white mb-2">Email or Phone</h2>
-            <input type="text" id="signup-contact" placeholder="Email or Mobile" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-2">
-            <button onclick="validateContact()" class="w-full py-3.5 rounded-full bg-neonCyan text-black font-bold mt-4">Next</button>
+            <h2 class="text-2xl font-bold text-white mb-2 font-space">Comms Link</h2>
+            <input type="text" id="signup-contact" placeholder="Email or Mobile Node" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-2">
+            <button onclick="validateContact()" class="w-full py-3.5 rounded-full bg-neonCyan text-black font-bold mt-4">Next Phase</button>
         </div>
 
         <div id="auth-signup-dob" class="hidden flex-col h-full px-6 pt-10">
             <button onclick="showAuthSection('auth-signup-step1')" class="text-white text-2xl mb-8"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 class="text-2xl font-bold text-white mb-2">When were you born?</h2>
-            <p class="text-gray-400 text-sm mb-6">You must be at least 13 years old.</p>
-            <input type="date" id="signup-date-input" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-2">
-            <p id="dob-error" class="text-red-500 text-xs hidden mb-4 font-bold">Error: You must be at least 13 years old.</p>
-            <button onclick="validateDOB()" class="w-full py-3.5 rounded-full bg-neonCyan text-black font-bold mt-4">Next</button>
+            <h2 class="text-2xl font-bold text-white mb-2 font-space">Date of Genesis</h2>
+            <p class="text-gray-400 text-sm mb-6">COPPA Protocol: Must be 13+ years of age.</p>
+            <input type="date" id="signup-date-input" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-2" max="2024-12-31">
+            <p id="dob-error" class="text-red-500 text-xs hidden mb-4 font-bold">Protocol Violation: User under 13.</p>
+            <button onclick="validateDOB()" class="w-full py-3.5 rounded-full bg-neonCyan text-black font-bold mt-4">Verify Age</button>
         </div>
         
         <div id="auth-signup-step3" class="hidden flex-col h-full px-6 pt-10">
             <button onclick="showAuthSection('auth-signup-dob')" class="text-white text-2xl mb-8"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 class="text-2xl font-bold text-white mb-6">Create Password & Name</h2>
-            <input type="text" id="signup-name" placeholder="Full name" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-4">
-            <input type="password" id="signup-password" placeholder="Password (Min 6 chars)" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-4">
-            <button onclick="validateNamePass()" class="w-full py-3.5 rounded-full bg-neonCyan text-black font-bold">Next</button>
+            <h2 class="text-2xl font-bold text-white mb-6 font-space">Identity Matrix</h2>
+            <input type="text" id="signup-name" placeholder="Full Legal Name" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-4">
+            <input type="password" id="signup-password" placeholder="Encryption Key (Min 6 chars)" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-4">
+            <button onclick="validateNamePass()" class="w-full py-3.5 rounded-full bg-neonCyan text-black font-bold">Generate Key</button>
         </div>
 
         <div id="auth-signup-step4" class="hidden flex-col h-full px-6 pt-10">
             <button onclick="showAuthSection('auth-signup-step3')" class="text-white text-2xl mb-8"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 class="text-2xl font-bold text-white mb-2">Create Username</h2>
-            <input type="text" id="signup-username" placeholder="e.g. ajay_singh" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-4">
-            <button onclick="finalizeSignup()" class="w-full py-3.5 rounded-full bg-neonPurple text-white font-bold mt-4">Complete Setup</button>
+            <h2 class="text-2xl font-bold text-white mb-2 font-space">Cyber Handle</h2>
+            <input type="text" id="signup-username" placeholder="e.g. neon_ninja" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-4">
+            <button onclick="finalizeSignup()" class="w-full py-3.5 rounded-full bg-neonPurple text-white font-bold mt-4 shadow-[0_0_15px_rgba(188,19,254,0.4)]">Activate Profile</button>
         </div>
     </div>
 
@@ -111,10 +141,10 @@
         <!-- Main Header -->
         <div id="main-header" class="absolute top-0 left-0 w-full z-30 top-gradient pt-8 pb-12 flex flex-col transition-all duration-300 pointer-events-none" style="padding-top: max(2rem, var(--safe-area-inset-top));">
             <div class="px-4 flex justify-between items-center mb-6 pointer-events-auto">
-                <h1 class="font-space font-bold text-2xl text-white drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]">YouShort</h1>
-                <div class="flex space-x-5 text-sm font-bold absolute left-1/2 transform -translate-x-1/2 bg-black/40 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10">
+                <h1 class="font-space font-bold text-2xl text-white neon-text">YouShort</h1>
+                <div class="flex space-x-5 text-sm font-bold absolute left-1/2 transform -translate-x-1/2 bg-black/60 backdrop-blur-md px-5 py-2 rounded-full border border-neonCyan/30 shadow-[0_0_10px_rgba(0,243,255,0.1)]">
                     <span class="text-gray-400 cursor-pointer transition-colors" id="tab-following" onclick="toggleFeedType('Following')">Following</span>
-                    <span class="text-white cursor-pointer drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] border-b-2 border-white pb-1 transition-all" id="tab-foryou" onclick="toggleFeedType('For You')">For You</span>
+                    <span class="text-white cursor-pointer drop-shadow-[0_0_8px_rgba(0,243,255,0.8)] border-b-2 border-neonCyan pb-1 transition-all" id="tab-foryou" onclick="toggleFeedType('For You')">For You</span>
                 </div>
             </div>
         </div>
@@ -124,17 +154,17 @@
 
         <!-- Search/Explore Page -->
         <main id="discover-screen" class="hidden absolute inset-0 bg-darkBg z-40 overflow-y-auto hide-scrollbar pb-24 flex flex-col">
-            <div class="px-4 pb-4 border-b border-gray-800 bg-black/90 backdrop-blur-md sticky top-0 z-10" style="padding-top: max(2rem, var(--safe-area-inset-top));">
-                <div class="bg-gray-900 rounded-xl p-2.5 flex items-center px-4 border border-gray-700">
+            <div class="px-4 pb-4 border-b border-cyberGray bg-black/90 backdrop-blur-md sticky top-0 z-10" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+                <div class="bg-cyberGray rounded-xl p-2.5 flex items-center px-4 border border-gray-800 focus-within:border-neonCyan transition-colors">
                     <i class="fa-solid fa-magnifying-glass text-gray-500 mr-3"></i>
-                    <input type="text" placeholder="Search creators, hashtags..." class="bg-transparent text-white text-sm w-full outline-none">
+                    <input type="text" placeholder="Search neural net, tags..." class="bg-transparent text-white text-sm w-full outline-none">
                 </div>
             </div>
             <div class="p-4">
-                <h3 class="text-white font-bold mb-3 flex items-center"><i class="fa-solid fa-fire text-orange-500 mr-2"></i> Trending Reels</h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <div class="relative aspect-[3/4] bg-gray-900 rounded-lg overflow-hidden cursor-pointer"><img src="https://images.unsplash.com/photo-1614729939124-03290b5609ce?q=80&w=500" class="w-full h-full object-cover"></div>
-                    <div class="relative aspect-[3/4] bg-gray-900 rounded-lg overflow-hidden cursor-pointer"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=500" class="w-full h-full object-cover"></div>
+                <h3 class="text-white font-bold mb-3 font-space flex items-center"><i class="fa-solid fa-bolt text-neonCyan mr-2"></i> Trending Nodes</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="relative aspect-[3/4] bg-cyberGray rounded-xl overflow-hidden cursor-pointer border border-gray-800 hover:border-neonPurple transition-all"><img src="https://images.unsplash.com/photo-1614729939124-03290b5609ce?q=80&w=500" class="w-full h-full object-cover opacity-80"></div>
+                    <div class="relative aspect-[3/4] bg-cyberGray rounded-xl overflow-hidden cursor-pointer border border-gray-800 hover:border-neonCyan transition-all"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=500" class="w-full h-full object-cover opacity-80"></div>
                 </div>
             </div>
         </main>
@@ -142,43 +172,52 @@
         <!-- CAMERA SCREEN -->
         <main id="camera-screen" class="hidden absolute inset-0 z-[120] bg-black flex flex-col">
             <div class="absolute top-0 left-0 w-full p-4 flex justify-between items-center z-10 top-gradient" style="padding-top: max(2rem, var(--safe-area-inset-top));">
-                <button onclick="closeCamera()" class="text-white text-2xl drop-shadow-md"><i class="fa-solid fa-xmark"></i></button>
-                <div class="flex space-x-4">
-                    <button class="text-white text-xl drop-shadow-md"><i class="fa-solid fa-music"></i></button>
-                    <button class="text-white text-xl drop-shadow-md" onclick="switchCamera()"><i class="fa-solid fa-camera-rotate"></i></button>
+                <button onclick="closeCamera()" class="text-white text-2xl drop-shadow-md hover:text-neonPurple"><i class="fa-solid fa-xmark"></i></button>
+                <div class="flex space-x-5">
+                    <button class="text-white text-xl drop-shadow-md hover:text-neonCyan"><i class="fa-solid fa-music"></i></button>
+                    <button class="text-white text-xl drop-shadow-md hover:text-neonCyan" onclick="switchCamera()"><i class="fa-solid fa-camera-rotate"></i></button>
                 </div>
             </div>
             <video id="camera-preview" class="w-full h-full object-cover bg-gray-900" autoplay playsinline muted></video>
-            <div class="absolute bottom-10 left-0 w-full flex justify-center items-center z-10 flex-col space-y-4">
-                <p class="text-white text-xs bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm">Hold to record</p>
-                <div class="w-20 h-20 rounded-full border-4 border-neonCyan/50 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
-                    <div class="w-16 h-16 rounded-full bg-neonCyan"></div>
+            
+            <!-- Camera UI Overlay -->
+            <div class="absolute inset-0 pointer-events-none border-[1px] border-neonCyan/20 m-4 rounded-3xl"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-30">
+                <i class="fa-solid fa-crosshairs text-5xl text-neonCyan"></i>
+            </div>
+
+            <div class="absolute bottom-12 left-0 w-full flex justify-center items-center z-10 flex-col space-y-4">
+                <p class="text-neonCyan text-[10px] uppercase tracking-widest bg-black/60 px-4 py-1.5 rounded-full border border-neonCyan/30 backdrop-blur-md">Hold to capture reality</p>
+                <div class="w-20 h-20 rounded-full border-4 border-neonPurple/70 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-[0_0_20px_rgba(188,19,254,0.5)]">
+                    <div class="w-16 h-16 rounded-full bg-white/90"></div>
                 </div>
             </div>
         </main>
 
         <!-- CHAT UI (MESSAGES) -->
         <main id="chat-list-screen" class="hidden absolute inset-0 z-[60] bg-darkBg flex flex-col">
-            <div class="flex items-center px-4 pb-4 border-b border-gray-800 bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+            <div class="flex items-center px-4 pb-4 border-b border-cyberGray bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
                 <button onclick="switchTab('home')" class="text-white text-2xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-xl font-bold text-white flex-1">Messages</h2>
+                <h2 class="text-xl font-bold text-white flex-1 font-space">Comms Channel</h2>
+                <i class="fa-solid fa-pen-to-square text-neonCyan"></i>
             </div>
             <div class="flex-1 overflow-y-auto p-2">
-                <div class="flex items-center justify-between p-3 hover:bg-gray-900 rounded-xl cursor-pointer" onclick="openChatRoom('@cyber_ninja', 'Active now')">
-                    <div class="flex items-center">
+                <div class="flex items-center justify-between p-3 hover:bg-cyberGray rounded-xl cursor-pointer transition-colors" onclick="openChatRoom('@cyber_ninja', 'Active now')">
+                    <div class="flex items-center relative">
                         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=cyber" class="w-14 h-14 rounded-full bg-gray-800 border-2 border-neonCyan">
+                        <div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-darkBg rounded-full"></div>
                         <div class="ml-3">
                             <p class="text-white text-sm font-bold">@cyber_ninja</p>
-                            <p class="text-gray-400 text-xs mt-0.5">Sent a reel • 2h</p>
+                            <p class="text-gray-400 text-xs mt-0.5">Encrypted link sent • 2h</p>
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center justify-between p-3 hover:bg-gray-900 rounded-xl cursor-pointer" onclick="openChatRoom('@neo_matrix', 'Active 5m ago')">
-                    <div class="flex items-center">
+                <div class="flex items-center justify-between p-3 hover:bg-cyberGray rounded-xl cursor-pointer transition-colors" onclick="openChatRoom('@neo_matrix', 'Offline')">
+                    <div class="flex items-center relative">
                         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=neo" class="w-14 h-14 rounded-full bg-gray-800">
                         <div class="ml-3">
                             <p class="text-white text-sm font-bold">@neo_matrix</p>
-                            <p class="text-gray-400 text-xs mt-0.5">Let's collab! • 1d</p>
+                            <p class="text-gray-400 text-xs mt-0.5">System rebooting... • 1d</p>
                         </div>
                     </div>
                 </div>
@@ -187,245 +226,395 @@
 
         <!-- CHAT ROOM -->
         <main id="chat-room-screen" class="hidden absolute inset-0 z-[70] bg-darkBg flex flex-col">
-            <div class="flex items-center px-4 pb-3 border-b border-gray-800 bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+            <div class="flex items-center px-4 pb-3 border-b border-cyberGray bg-black/90 backdrop-blur-md shadow-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
                 <button onclick="document.getElementById('chat-room-screen').classList.add('hidden')" class="text-white text-2xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
-                <img src="" id="chat-room-avatar" class="w-8 h-8 rounded-full bg-gray-800 mr-3">
+                <img src="" id="chat-room-avatar" class="w-9 h-9 rounded-full bg-gray-800 mr-3 border border-neonCyan">
                 <div class="flex-1">
-                    <h2 id="chat-room-name" class="text-base font-bold text-white">@username</h2>
-                    <p id="chat-room-status" class="text-[10px] text-neonCyan">Active now</p>
+                    <h2 id="chat-room-name" class="text-base font-bold text-white font-space">@username</h2>
+                    <p id="chat-room-status" class="text-[10px] text-neonCyan flex items-center"><i class="fa-solid fa-circle text-[6px] mr-1 animate-pulse"></i> Active now</p>
                 </div>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 flex flex-col space-y-4" id="chat-messages-container"></div>
-            <div class="p-4 bg-black/90 border-t border-gray-900 pb-8 flex items-center space-x-3">
-                <div class="flex-1 bg-gray-900 border border-gray-700 rounded-full flex items-center px-4 py-2">
-                    <input type="text" id="chat-input-field" placeholder="Message..." class="bg-transparent text-white text-sm w-full outline-none">
+            
+            <div class="flex-1 overflow-y-auto p-4 flex flex-col space-y-4 bg-gradient-to-b from-darkBg to-cyberGray" id="chat-messages-container">
+                <!-- Messages will load here -->
+            </div>
+            
+            <div class="p-4 bg-black/95 border-t border-cyberGray pb-8 flex items-center space-x-3 backdrop-blur-lg">
+                <button class="text-gray-400 text-xl hover:text-neonPurple transition-colors"><i class="fa-solid fa-plus"></i></button>
+                <div class="flex-1 bg-cyberGray border border-gray-700 rounded-full flex items-center px-4 py-2 focus-within:border-neonCyan transition-all">
+                    <input type="text" id="chat-input-field" placeholder="Transmit message..." class="bg-transparent text-white text-sm w-full outline-none" onkeypress="if(event.key === 'Enter') sendChatMessage()">
                 </div>
-                <button onclick="sendChatMessage()" class="text-neonCyan font-bold text-sm bg-gray-900 px-4 py-2 rounded-full">Send</button>
+                <button onclick="sendChatMessage()" class="text-neonCyan font-bold text-lg hover:scale-110 transition-transform"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </main>
 
         <!-- Analytics Dashboard Screen -->
         <main id="analytics-screen" class="hidden absolute inset-0 z-[60] bg-darkBg flex flex-col overflow-y-auto pb-20">
-            <div class="flex items-center px-4 pb-4 border-b border-gray-800 bg-black/90 backdrop-blur-md sticky top-0" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+            <div class="flex items-center px-4 pb-4 border-b border-cyberGray bg-black/90 backdrop-blur-md sticky top-0" style="padding-top: max(2rem, var(--safe-area-inset-top));">
                 <button onclick="document.getElementById('analytics-screen').classList.add('hidden')" class="text-white text-2xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-xl font-bold text-white flex-1">Professional Dashboard</h2>
+                <h2 class="text-xl font-bold text-white flex-1 font-space">Neural Analytics</h2>
             </div>
-            <div class="p-4 space-y-4">
-                <h3 class="text-white font-bold text-lg">Insights Overview (Last 30 days)</h3>
+            <div class="p-4 space-y-5">
+                <h3 class="text-white font-bold text-lg font-space text-neonCyan">Data Overview (30 Cycles)</h3>
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-gray-900 p-4 rounded-xl border border-gray-800"><p class="text-gray-400 text-xs mb-1">Accounts Reached</p><p class="text-white font-bold text-2xl">1,240 <span class="text-green-500 text-xs">+12%</span></p></div>
-                    <div class="bg-gray-900 p-4 rounded-xl border border-gray-800"><p class="text-gray-400 text-xs mb-1">Total Followers</p><p class="text-white font-bold text-2xl">48 <span class="text-green-500 text-xs">+3</span></p></div>
+                    <div class="bg-cyberGray p-4 rounded-xl border border-gray-800 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
+                        <p class="text-gray-400 text-xs mb-1">Nodes Reached</p>
+                        <p class="text-white font-bold text-2xl">1,240 <span class="text-neonCyan text-xs ml-1"><i class="fa-solid fa-arrow-trend-up"></i> 12%</span></p>
+                    </div>
+                    <div class="bg-cyberGray p-4 rounded-xl border border-gray-800 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
+                        <p class="text-gray-400 text-xs mb-1">Total Connections</p>
+                        <p class="text-white font-bold text-2xl">48 <span class="text-neonCyan text-xs ml-1"><i class="fa-solid fa-arrow-trend-up"></i> 3</span></p>
+                    </div>
+                </div>
+                <div class="bg-cyberGray p-4 rounded-xl border border-gray-800 mt-4">
+                    <p class="text-gray-400 text-xs mb-3">Audience Demographics</p>
+                    <div class="w-full h-2 bg-gray-800 rounded-full flex overflow-hidden">
+                        <div class="h-full bg-neonPurple w-3/5"></div>
+                        <div class="h-full bg-neonCyan w-2/5"></div>
+                    </div>
+                    <div class="flex justify-between mt-2 text-[10px] text-gray-500">
+                        <span>60% Cyber</span><span>40% Organic</span>
+                    </div>
                 </div>
             </div>
         </main>
 
         <!-- User Profile Screen -->
         <main id="profile-screen" class="hidden absolute inset-0 bg-darkBg z-40 overflow-y-auto hide-scrollbar pb-24">
-            <div class="relative w-full h-40 bg-gray-900 cursor-pointer" onclick="document.getElementById('banner-upload').click()">
-                <img id="profile-banner" src="" class="w-full h-full object-cover opacity-60">
+            <div class="relative w-full h-44 bg-cyberGray cursor-pointer group" onclick="document.getElementById('banner-upload').click()">
+                <img id="profile-banner" src="" class="w-full h-full object-cover opacity-50 group-hover:opacity-30 transition-opacity">
+                <div class="absolute inset-0 bg-gradient-to-t from-darkBg to-transparent opacity-80"></div>
                 <div class="absolute top-0 left-0 w-full p-4 flex justify-between items-center z-10" style="padding-top: max(1rem, var(--safe-area-inset-top));">
-                    <h2 id="display-username" class="text-xl font-bold text-white drop-shadow-md">@username</h2>
-                    <button onclick="toggleSettings()" class="text-white text-2xl drop-shadow-md bg-black/40 p-2 rounded-full"><i class="fa-solid fa-bars"></i></button>
+                    <h2 id="display-username" class="text-xl font-bold text-white drop-shadow-md font-space tracking-wider">@username</h2>
+                    <button onclick="toggleSettings()" class="text-white text-2xl drop-shadow-md bg-black/40 p-2 rounded-full hover:text-neonCyan transition-colors"><i class="fa-solid fa-bars"></i></button>
                 </div>
-                <div class="absolute bottom-2 right-2 text-xs text-white/70 bg-black/50 px-2 py-1 rounded-full"><i class="fa-solid fa-camera mr-1"></i>Edit Cover</div>
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white/0 group-hover:text-white/80 transition-colors"><i class="fa-solid fa-camera text-3xl drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]"></i></div>
             </div>
-            <div class="px-4 relative -top-10">
-                <div class="flex justify-between items-end mb-3">
-                    <div class="w-24 h-24 rounded-full border-4 border-darkBg bg-gray-900 overflow-hidden relative cursor-pointer group" onclick="document.getElementById('avatar-upload').click()">
+            
+            <div class="px-4 relative -top-12">
+                <div class="flex justify-between items-end mb-4">
+                    <div class="w-24 h-24 rounded-full border-4 border-darkBg bg-cyberGray overflow-hidden relative cursor-pointer group shadow-[0_0_15px_rgba(0,243,255,0.3)]" onclick="document.getElementById('avatar-upload').click()">
                         <img id="display-avatar" src="" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/40 flex justify-center items-center opacity-0 group-hover:opacity-100"><i class="fa-solid fa-camera text-white"></i></div>
+                        <div class="absolute inset-0 bg-black/50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-camera text-white text-xl"></i></div>
                     </div>
-                    <div class="flex space-x-4 mb-2">
-                        <div class="text-center"><p class="text-white font-bold text-lg">0</p><p class="text-gray-400 text-[10px]">Videos</p></div>
-                        <div class="text-center cursor-pointer" onclick="openFollowModal('Followers')"><p class="text-white font-bold text-lg">48</p><p class="text-gray-400 text-[10px]">Followers</p></div>
-                        <div class="text-center cursor-pointer" onclick="openFollowModal('Following')"><p class="text-white font-bold text-lg">12</p><p class="text-gray-400 text-[10px]">Following</p></div>
+                    <div class="flex space-x-6 mb-2">
+                        <div class="text-center"><p class="text-white font-bold text-xl font-space">0</p><p class="text-gray-400 text-[10px] uppercase tracking-wider">Uploads</p></div>
+                        <div class="text-center cursor-pointer hover:text-neonCyan transition-colors" onclick="openFollowModal('Followers')"><p class="text-white font-bold text-xl font-space">48</p><p class="text-gray-400 text-[10px] uppercase tracking-wider">Followers</p></div>
+                        <div class="text-center cursor-pointer hover:text-neonCyan transition-colors" onclick="openFollowModal('Following')"><p class="text-white font-bold text-xl font-space">12</p><p class="text-gray-400 text-[10px] uppercase tracking-wider">Following</p></div>
                     </div>
                 </div>
                 
                 <div class="flex items-center mb-1">
                     <h2 id="display-fullname" class="text-lg font-bold text-white">Full Name</h2>
-                    <svg id="profile-verified-badge" class="ml-1.5 hidden" fill="#0095f6" height="14" viewBox="0 0 40 40" width="14"><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"></path></svg>
+                    <svg id="profile-verified-badge" class="ml-1.5 hidden" fill="#00f3ff" height="15" viewBox="0 0 40 40" width="15"><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"></path></svg>
                 </div>
-                <p id="display-bio" class="text-xs text-gray-400 mb-2 leading-relaxed">Welcome to YouShort!</p>
+                <p id="display-bio" class="text-xs text-gray-400 mb-4 leading-relaxed max-w-[90%]">Welcome to the future of YouShort 🚀</p>
                 
-                <div id="pro-dashboard-btn" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 mb-4 hidden cursor-pointer" onclick="document.getElementById('analytics-screen').classList.remove('hidden')">
-                    <p class="text-white text-sm font-bold">Professional dashboard</p>
-                    <p class="text-gray-400 text-xs">Analytics and tools for creators.</p>
+                <div id="pro-dashboard-btn" class="w-full bg-gradient-to-r from-cyberGray to-gray-900 border border-gray-700 hover:border-neonCyan rounded-lg p-3 mb-4 hidden cursor-pointer transition-colors shadow-sm" onclick="document.getElementById('analytics-screen').classList.remove('hidden')">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-white text-sm font-bold font-space text-neonCyan">Professional Dashboard</p>
+                            <p class="text-gray-400 text-[10px]">Access neural analytics & creator tools.</p>
+                        </div>
+                        <i class="fa-solid fa-chart-simple text-neonCyan"></i>
+                    </div>
                 </div>
                 
-                <div class="flex space-x-2 w-full">
-                    <button class="flex-1 bg-gray-900 border border-gray-700 text-white font-bold text-sm py-2 rounded-lg" onclick="openEditProfile()">Edit Profile</button>
-                    <button class="flex-1 bg-gray-900 border border-gray-700 text-white font-bold text-sm py-2 rounded-lg" onclick="openShareModal()">Share Profile</button>
+                <div class="flex space-x-3 w-full">
+                    <button class="flex-1 bg-cyberGray border border-gray-700 hover:border-neonPurple text-white font-bold text-sm py-2 rounded-lg transition-colors" onclick="openEditProfile()">Edit Profile</button>
+                    <button class="flex-1 bg-cyberGray border border-gray-700 hover:border-neonPurple text-white font-bold text-sm py-2 rounded-lg transition-colors" onclick="openShareModal()">Share Link</button>
                 </div>
             </div>
         </main>
 
         <!-- Edit Profile Modal -->
         <main id="edit-profile-screen" class="hidden absolute inset-0 z-[60] bg-darkBg flex flex-col pb-10">
-            <div class="flex items-center px-4 pb-4 border-b border-gray-800 bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+            <div class="flex items-center px-4 pb-4 border-b border-cyberGray bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
                 <button onclick="closeEditProfile()" class="text-white text-2xl mr-4"><i class="fa-solid fa-xmark"></i></button>
-                <h2 class="text-xl font-bold text-white flex-1">Edit Profile</h2>
-                <button onclick="saveProfile()" class="text-neonCyan font-bold">Save</button>
+                <h2 class="text-xl font-bold text-white flex-1 font-space">Edit Identity</h2>
+                <button onclick="saveProfile()" class="text-neonCyan font-bold tracking-widest text-sm uppercase">Save</button>
             </div>
             <div class="p-4 space-y-6">
-                <div class="border-b border-gray-800 pb-2">
-                    <label class="text-gray-500 text-xs font-bold mb-1 block">Name</label>
+                <div class="border-b border-gray-800 pb-2 focus-within:border-neonCyan transition-colors">
+                    <label class="text-neonCyan text-[10px] uppercase font-bold mb-1 block tracking-wider">Display Name</label>
                     <input type="text" id="edit-name" class="w-full bg-transparent text-white text-base outline-none">
                 </div>
-                <div class="border-b border-gray-800 pb-2">
-                    <label class="text-gray-500 text-xs font-bold mb-1 block">Bio</label>
-                    <textarea id="edit-bio" class="w-full bg-transparent text-white text-base outline-none h-16 resize-none"></textarea>
+                <div class="border-b border-gray-800 pb-2 focus-within:border-neonPurple transition-colors">
+                    <label class="text-neonPurple text-[10px] uppercase font-bold mb-1 block tracking-wider">Bio Data</label>
+                    <textarea id="edit-bio" class="w-full bg-transparent text-white text-base outline-none h-20 resize-none"></textarea>
                 </div>
             </div>
         </main>
 
         <!-- Followers / Following Modal -->
         <main id="follow-list-modal" class="hidden absolute inset-0 z-[80] bg-darkBg flex flex-col">
-            <div class="flex items-center px-4 pb-4 border-b border-gray-800 bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+            <div class="flex items-center px-4 pb-4 border-b border-cyberGray bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
                 <button onclick="document.getElementById('follow-list-modal').classList.add('hidden')" class="text-white text-2xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 id="follow-modal-title" class="text-xl font-bold text-white flex-1">List</h2>
+                <h2 id="follow-modal-title" class="text-xl font-bold text-white flex-1 font-space">List</h2>
             </div>
             <div class="flex-1 overflow-y-auto p-4 flex flex-col items-center justify-center text-gray-500">
-                <i class="fa-solid fa-users text-4xl mb-3"></i>
-                <p>No users found yet.</p>
+                <i class="fa-solid fa-network-wired text-5xl mb-4 text-gray-700"></i>
+                <p class="text-sm font-space">No nodes connected yet.</p>
             </div>
         </main>
 
-        <!-- Settings Screen -->
+        <!-- MASSIVELY EXPANDED Settings Screen -->
         <main id="settings-screen" class="hidden absolute inset-0 z-[50] bg-darkBg flex flex-col pb-20">
-            <div class="flex items-center px-4 pb-4 border-b border-gray-800 bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
-                <button onclick="closeSettings()" class="text-white text-2xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-xl font-bold text-white">Settings</h2>
+            <div class="flex items-center px-4 pb-4 border-b border-cyberGray bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+                <button onclick="closeSettings()" class="text-white text-2xl mr-4 hover:text-neonCyan transition-colors"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 class="text-xl font-bold text-white font-space">Control Panel</h2>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-6">
-                <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
-                    <h3 class="text-white font-bold text-lg mb-4">Account Center</h3>
+            <div class="flex-1 overflow-y-auto p-4 space-y-5">
+                
+                <!-- Account Center -->
+                <div class="bg-cyberGray border border-gray-800 rounded-xl p-4 shadow-sm">
+                    <h3 class="text-white font-bold text-sm mb-4 font-space tracking-wider uppercase text-gray-400">Account Core</h3>
                     <div class="space-y-4">
-                        <div class="flex justify-between items-center cursor-pointer" onclick="document.getElementById('age-edit-modal').classList.remove('hidden')">
-                            <span class="text-sm text-white">Personal Details (Edit Age)</span><i class="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
+                        <div class="flex justify-between items-center cursor-pointer hover:bg-gray-800/50 p-1 -mx-1 rounded transition-colors" onclick="document.getElementById('age-edit-modal').classList.remove('hidden')">
+                            <span class="text-sm text-white">Personal Details (Age/DOB)</span><i class="fa-solid fa-calendar-days text-gray-500 text-sm"></i>
                         </div>
-                        <div class="flex justify-between items-center cursor-pointer" onclick="openVerificationModal()">
-                            <span class="text-sm text-white">Request Verification (Blue Tick)</span><i class="fa-solid fa-certificate text-instaBlue"></i>
+                        <div class="flex justify-between items-center cursor-pointer hover:bg-gray-800/50 p-1 -mx-1 rounded transition-colors" onclick="openVerificationModal()">
+                            <span class="text-sm text-white">Request Verification Badge</span><i class="fa-solid fa-certificate text-neonCyan text-lg drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]"></i>
+                        </div>
+                        <div class="flex justify-between items-center cursor-pointer hover:bg-gray-800/50 p-1 -mx-1 rounded transition-colors" onclick="toggleAccountType()">
+                            <span class="text-sm text-white" id="btn-account-type-text">Switch to Pro Account</span><i class="fa-solid fa-briefcase text-gray-500 text-sm"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-gray-900 border border-gray-800 rounded-xl p-4 cursor-pointer" onclick="toggleAccountType()">
-                    <div class="flex items-center space-x-3"><i class="fa-solid fa-briefcase text-white w-5 text-center"></i><span class="text-white text-sm" id="btn-account-type-text">Switch to Pro Account</span></div>
+                <!-- Futuristic AI Features (RESTORED) -->
+                <div class="bg-cyberGray border border-gray-800 rounded-xl p-4 shadow-[0_0_15px_rgba(188,19,254,0.1)] border-l-2 border-l-neonPurple">
+                    <h3 class="text-white font-bold text-sm mb-4 font-space tracking-wider uppercase text-neonPurple">AI & Automation</h3>
+                    <div class="space-y-4">
+                        <!-- AI Auto Reply Toggle -->
+                        <div class="flex justify-between items-center cursor-pointer" onclick="toggleAI()">
+                            <div>
+                                <span class="text-sm text-white font-bold block flex items-center"><i class="fa-solid fa-robot text-neonPurple mr-2"></i>AI Auto-Reply Bot</span>
+                                <span class="text-[10px] text-gray-400">Smart chat responses when away</span>
+                            </div>
+                            <div id="ai-toggle-btn" class="w-12 h-6 bg-gray-700 rounded-full relative transition-colors duration-300">
+                                <div class="w-5 h-5 bg-white rounded-full absolute left-1 top-0.5 shadow transition-transform duration-300"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="bg-gray-900 border border-gray-800 rounded-xl p-4 cursor-pointer" onclick="document.getElementById('bug-report-modal').classList.remove('hidden')">
-                    <div class="flex items-center space-x-3"><i class="fa-solid fa-bug text-orange-500 w-5 text-center"></i><span class="text-white text-sm">Report a Problem / Bug</span></div>
+                <!-- App Settings -->
+                <div class="bg-cyberGray border border-gray-800 rounded-xl p-4 shadow-sm">
+                    <h3 class="text-white font-bold text-sm mb-4 font-space tracking-wider uppercase text-gray-400">System Preferences</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center cursor-pointer hover:bg-gray-800/50 p-1 -mx-1 rounded transition-colors" onclick="alertMsg('Settings saved locally.')">
+                            <span class="text-sm text-white">Push Notifications</span><i class="fa-solid fa-bell text-gray-500"></i>
+                        </div>
+                        <div class="flex justify-between items-center cursor-pointer hover:bg-gray-800/50 p-1 -mx-1 rounded transition-colors" onclick="alertMsg('Security mode active.')">
+                            <span class="text-sm text-white">Privacy & Security</span><i class="fa-solid fa-lock text-gray-500"></i>
+                        </div>
+                        <div class="flex justify-between items-center cursor-pointer hover:bg-gray-800/50 p-1 -mx-1 rounded transition-colors" onclick="alertMsg('Theme set to Futuristic Dark.')">
+                            <span class="text-sm text-white">UI Theme (Neon/Dark)</span><i class="fa-solid fa-palette text-gray-500"></i>
+                        </div>
+                    </div>
                 </div>
 
-                <button onclick="logout()" class="w-full text-red-500 font-bold text-sm p-4 bg-gray-900 rounded-xl border border-red-500/20 text-center">Log out</button>
+                <!-- Support & Reporting -->
+                <div class="bg-cyberGray border border-gray-800 rounded-xl p-4 shadow-sm">
+                    <h3 class="text-white font-bold text-sm mb-3 font-space tracking-wider uppercase text-gray-400">Support & Help</h3>
+                    <div class="flex items-center space-x-3 cursor-pointer hover:bg-gray-800/50 p-2 -mx-2 rounded transition-colors" onclick="document.getElementById('bug-report-modal').classList.remove('hidden')">
+                        <i class="fa-solid fa-bug text-orange-500 text-lg w-6 text-center"></i>
+                        <span class="text-white text-sm">Report a Problem / Bug</span>
+                    </div>
+                    <div class="flex items-center space-x-3 cursor-pointer hover:bg-gray-800/50 p-2 -mx-2 rounded transition-colors mt-1" onclick="alertMsg('Help Center opening...')">
+                        <i class="fa-solid fa-circle-question text-instaBlue text-lg w-6 text-center"></i>
+                        <span class="text-white text-sm">Help Center & FAQ</span>
+                    </div>
+                </div>
+
+                <button onclick="logout()" class="w-full text-red-500 font-bold text-sm p-4 bg-cyberGray rounded-xl border border-red-500/20 text-center hover:bg-red-500/10 transition-colors uppercase tracking-widest font-space">Terminate Session</button>
             </div>
         </main>
 
         <!-- Edit Age Modal -->
         <div id="age-edit-modal" class="hidden absolute inset-0 z-[80] bg-darkBg flex flex-col">
-            <div class="flex items-center px-4 pb-4 border-b border-gray-800 bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+            <div class="flex items-center px-4 pb-4 border-b border-cyberGray bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
                 <button onclick="document.getElementById('age-edit-modal').classList.add('hidden')" class="text-white text-2xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-xl font-bold text-white flex-1">Date of Birth</h2>
-                <button onclick="saveNewAge()" class="text-neonCyan font-bold">Save</button>
+                <h2 class="text-xl font-bold text-white flex-1 font-space">Date of Birth</h2>
+                <button onclick="saveNewAge()" class="text-neonCyan font-bold uppercase tracking-wider text-sm">Update</button>
             </div>
             <div class="p-4">
-                <p class="text-gray-400 text-sm mb-4">Update your Date of Birth.</p>
-                <input type="date" id="edit-age-input" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-2" value="2000-01-01">
+                <p class="text-gray-400 text-sm mb-4">Update your Genesis Date (COPPA 13+ strict).</p>
+                <input type="date" id="edit-age-input" class="cyber-input w-full rounded-lg p-4 text-white text-sm mb-2" max="2024-12-31" value="2000-01-01">
             </div>
         </div>
 
-        <!-- Verification Modal -->
+        <!-- FULL & MASSIVE Verification Modal (RESTORED & UPGRADED) -->
         <main id="verification-modal" class="hidden absolute inset-0 z-[70] bg-darkBg flex flex-col pb-10 overflow-y-auto">
-            <div class="flex items-center px-4 pb-4 border-b border-gray-800 bg-black/90 backdrop-blur-md sticky top-0 z-10" style="padding-top: max(2rem, var(--safe-area-inset-top));">
-                <button onclick="closeVerificationModal()" class="text-white text-2xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-xl font-bold text-white flex-1">Apply for Verification</h2>
+            <div class="flex items-center px-4 pb-4 border-b border-cyberGray bg-black/90 backdrop-blur-md sticky top-0 z-10" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+                <button onclick="closeVerificationModal()" class="text-white text-2xl mr-4"><i class="fa-solid fa-xmark"></i></button>
+                <h2 class="text-xl font-bold text-white flex-1 font-space">Verification Center</h2>
             </div>
             <div class="p-4 space-y-6">
-                <p class="text-gray-400 text-sm">Verified accounts have a blue checkmark to confirm they are the real public figure.</p>
-                <div class="space-y-4">
-                    <div>
-                        <label class="text-gray-500 text-xs font-bold mb-1 block">Full Name</label>
-                        <input type="text" id="verify-name" placeholder="E.g. Ajay Singh" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white text-sm outline-none">
+                <div class="bg-blue-500/10 border border-blue-500/30 p-3 rounded-lg flex items-start space-x-3">
+                    <i class="fa-solid fa-circle-info text-blue-400 mt-0.5"></i>
+                    <p class="text-gray-300 text-xs leading-relaxed">Verified accounts have a blue checkmark to confirm they are the authentic presence of the public figure, celebrity, or global brand they represent.</p>
+                </div>
+                
+                <div class="space-y-5">
+                    <!-- Step 1: Identity -->
+                    <div class="bg-cyberGray border border-gray-800 p-4 rounded-xl space-y-4 shadow-sm">
+                        <h3 class="text-white font-bold border-b border-gray-700 pb-2 font-space text-neonCyan">Step 1: Authenticity Validation</h3>
+                        
+                        <div>
+                            <label class="text-gray-500 text-[10px] uppercase font-bold mb-1 block tracking-wide">Full Legal Name</label>
+                            <input type="text" id="verify-name" placeholder="E.g. Ajay Singh" class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white text-sm outline-none focus:border-neonCyan transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label class="text-gray-500 text-[10px] uppercase font-bold mb-1 block tracking-wide">Known As / Stage Name</label>
+                            <input type="text" placeholder="E.g. AJ" class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white text-sm outline-none focus:border-neonCyan transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="text-gray-500 text-[10px] uppercase font-bold mb-1 block tracking-wide">Document Type</label>
+                            <select class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white text-sm outline-none appearance-none">
+                                <option>Passport</option>
+                                <option>National Identification Card (Aadhar/SSN)</option>
+                                <option>Driver's License</option>
+                                <option>Official Tax Filing</option>
+                            </select>
+                        </div>
+
+                        <div class="mt-2">
+                            <label class="text-gray-500 text-[10px] uppercase font-bold mb-2 block tracking-wide">Upload Document Picture</label>
+                            <button onclick="document.getElementById('doc-upload').click()" class="w-full p-4 border-2 border-dashed border-gray-700 rounded-lg text-gray-400 hover:border-neonCyan hover:text-neonCyan transition-colors flex flex-col items-center justify-center space-y-2">
+                                <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                                <span class="text-xs">Tap to upload file (.jpg, .pdf)</span>
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                        <label class="text-gray-500 text-xs font-bold mb-1 block">Document Type</label>
-                        <select class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white text-sm outline-none">
-                            <option>Passport</option><option>National ID</option>
-                        </select>
+
+                    <!-- Step 2: Notability -->
+                    <div class="bg-cyberGray border border-gray-800 p-4 rounded-xl space-y-4 shadow-sm">
+                        <h3 class="text-white font-bold border-b border-gray-700 pb-2 font-space text-neonCyan">Step 2: Confirm Notability</h3>
+                        <div>
+                            <label class="text-gray-500 text-[10px] uppercase font-bold mb-1 block tracking-wide">Category</label>
+                            <select id="verify-category" class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white text-sm outline-none appearance-none">
+                                <option>Digital Creator / Influencer</option>
+                                <option>Gaming / Esports</option>
+                                <option>Sports</option>
+                                <option>Music & Audio</option>
+                                <option>Entertainment & Acting</option>
+                                <option>News / Media Publication</option>
+                                <option>Business / Brand / Org</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-gray-500 text-[10px] uppercase font-bold mb-1 block tracking-wide">Country/Region</label>
+                            <input type="text" placeholder="e.g. India" class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white text-sm outline-none focus:border-neonCyan">
+                        </div>
+                        <div>
+                            <label class="text-gray-500 text-[10px] uppercase font-bold mb-1 block tracking-wide">Audience / Why verify you? (Optional)</label>
+                            <textarea class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white text-sm outline-none h-20 resize-none focus:border-neonCyan" placeholder="Describe the people who follow you and why you need verification..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Links -->
+                    <div class="bg-cyberGray border border-gray-800 p-4 rounded-xl space-y-3 shadow-sm">
+                        <h3 class="text-white font-bold border-b border-gray-700 pb-2 font-space text-neonCyan">Step 3: External Links (Optional)</h3>
+                        <p class="text-gray-500 text-xs mb-2">Add articles, social media accounts, and other links that show your account is in the public interest.</p>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-brands fa-instagram text-gray-500"></i>
+                            <input type="url" placeholder="Social Link 1 URL" class="flex-1 bg-black border border-gray-700 rounded-lg p-3 text-white text-sm outline-none focus:border-neonCyan">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-brands fa-youtube text-gray-500"></i>
+                            <input type="url" placeholder="Social Link 2 URL" class="flex-1 bg-black border border-gray-700 rounded-lg p-3 text-white text-sm outline-none focus:border-neonCyan">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-newspaper text-gray-500"></i>
+                            <input type="url" placeholder="News Article URL" class="flex-1 bg-black border border-gray-700 rounded-lg p-3 text-white text-sm outline-none focus:border-neonCyan">
+                        </div>
                     </div>
                 </div>
-                <button onclick="submitVerification()" class="w-full py-3.5 rounded-full bg-instaBlue text-white font-bold mt-4">Submit Application</button>
+
+                <button onclick="submitVerification()" class="w-full py-4 rounded-xl bg-neonCyan text-black font-bold mt-2 shadow-[0_0_15px_rgba(0,243,255,0.4)] uppercase tracking-widest text-sm hover:scale-[1.02] transition-transform">Submit Verification Request</button>
             </div>
         </main>
 
         <!-- Bug Report Modal -->
         <div id="bug-report-modal" class="hidden absolute inset-0 z-[80] bg-darkBg flex flex-col">
-            <div class="flex items-center px-4 pb-4 border-b border-gray-800 bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
-                <button onclick="document.getElementById('bug-report-modal').classList.add('hidden')" class="text-white text-2xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-xl font-bold text-white flex-1">Report a Bug</h2>
-                <button onclick="document.getElementById('bug-report-modal').classList.add('hidden'); alertMsg('Bug Report Sent to Admin!');" class="text-neonCyan font-bold">Send</button>
+            <div class="flex items-center px-4 pb-4 border-b border-cyberGray bg-black/90 backdrop-blur-md" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+                <button onclick="document.getElementById('bug-report-modal').classList.add('hidden')" class="text-white text-2xl mr-4"><i class="fa-solid fa-xmark"></i></button>
+                <h2 class="text-xl font-bold text-white flex-1 font-space">Report a Bug</h2>
+                <button onclick="document.getElementById('bug-report-modal').classList.add('hidden'); alertMsg('Bug Report Transmitted to Admin!');" class="text-neonCyan font-bold text-sm uppercase tracking-wider">Send</button>
             </div>
             <div class="p-4">
-                <p class="text-gray-400 text-sm mb-4">Please describe the problem you found or the feature you want.</p>
-                <textarea class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white text-sm outline-none h-32 resize-none" placeholder="Type here..."></textarea>
+                <p class="text-gray-400 text-sm mb-4">Describe the anomaly or feature request in the system.</p>
+                <textarea class="w-full bg-cyberGray border border-gray-700 rounded-lg p-3 text-white text-sm outline-none h-40 resize-none focus:border-orange-500 transition-colors" placeholder="Type report here..."></textarea>
             </div>
         </div>
 
         <!-- Share Bottom Sheet -->
-        <div id="share-modal" class="hidden absolute inset-0 z-[150] bg-black/60 flex flex-col justify-end transition-opacity">
-            <div class="bg-gray-900 w-full rounded-t-3xl p-6 bottom-sheet open" id="share-sheet-content">
+        <div id="share-modal" class="hidden absolute inset-0 z-[150] bg-black/80 flex flex-col justify-end transition-opacity backdrop-blur-sm">
+            <div class="bg-cyberGray w-full rounded-t-3xl p-6 bottom-sheet open border-t border-gray-800" id="share-sheet-content">
                 <div class="w-12 h-1.5 bg-gray-700 rounded-full mx-auto mb-6"></div>
-                <h3 class="text-white font-bold text-lg mb-4">Share to</h3>
-                <div class="flex space-x-6 overflow-x-auto hide-scrollbar pb-4">
-                    <div class="flex flex-col items-center space-y-2 cursor-pointer" onclick="closeShareModal(); alertMsg('Link Copied!')">
-                        <div class="w-14 h-14 rounded-full bg-gray-800 flex items-center justify-center text-white text-xl"><i class="fa-solid fa-link"></i></div>
-                        <span class="text-xs text-gray-300">Copy Link</span>
+                <h3 class="text-white font-bold text-lg mb-4 font-space text-center">Share Link</h3>
+                <div class="flex justify-center space-x-8 overflow-x-auto hide-scrollbar pb-6 pt-2">
+                    <div class="flex flex-col items-center space-y-3 cursor-pointer group" onclick="closeShareModal(); alertMsg('Link Copied to Clipboard!')">
+                        <div class="w-14 h-14 rounded-full bg-gray-800 group-hover:bg-neonCyan group-hover:text-black transition-colors flex items-center justify-center text-white text-xl shadow-lg"><i class="fa-solid fa-link"></i></div>
+                        <span class="text-xs text-gray-300 font-bold">Copy Link</span>
                     </div>
-                    <div class="flex flex-col items-center space-y-2 cursor-pointer" onclick="closeShareModal()">
-                        <div class="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center text-white text-2xl"><i class="fa-brands fa-whatsapp"></i></div>
-                        <span class="text-xs text-gray-300">WhatsApp</span>
+                    <div class="flex flex-col items-center space-y-3 cursor-pointer group" onclick="closeShareModal(); alertMsg('Opening WhatsApp...')">
+                        <div class="w-14 h-14 rounded-full bg-[#25D366] hover:scale-110 transition-transform flex items-center justify-center text-white text-2xl shadow-lg"><i class="fa-brands fa-whatsapp"></i></div>
+                        <span class="text-xs text-gray-300 font-bold">WhatsApp</span>
                     </div>
                 </div>
-                <button class="w-full mt-4 p-3 bg-gray-800 rounded-xl text-white font-bold" onclick="closeShareModal()">Cancel</button>
+                <button class="w-full p-4 bg-gray-800 hover:bg-gray-700 rounded-xl text-white font-bold transition-colors" onclick="closeShareModal()">Cancel</button>
             </div>
         </div>
         
         <!-- Report Content Bottom Sheet -->
-        <div id="report-modal" class="hidden absolute inset-0 z-[150] bg-black/60 flex flex-col justify-end transition-opacity">
-            <div class="bg-gray-900 w-full rounded-t-3xl p-6 bottom-sheet open">
+        <div id="report-modal" class="hidden absolute inset-0 z-[150] bg-black/80 flex flex-col justify-end transition-opacity backdrop-blur-sm">
+            <div class="bg-cyberGray w-full rounded-t-3xl p-6 bottom-sheet open border-t border-gray-800">
                 <div class="w-12 h-1.5 bg-gray-700 rounded-full mx-auto mb-6"></div>
-                <h3 class="text-white font-bold text-lg mb-4 text-center">Report this Content?</h3>
-                <div class="space-y-2 mb-6">
-                    <button class="w-full text-left p-4 rounded-xl bg-gray-800 text-white font-bold" onclick="document.getElementById('report-modal').classList.add('hidden'); alertMsg('Report Submitted!')">Spam or Misleading</button>
-                    <button class="w-full text-left p-4 rounded-xl bg-gray-800 text-red-500 font-bold" onclick="document.getElementById('report-modal').classList.add('hidden'); alertMsg('Report Submitted!')">Inappropriate Content</button>
+                <h3 class="text-white font-bold text-lg mb-4 text-center font-space">Report this Content?</h3>
+                <div class="space-y-3 mb-6">
+                    <button class="w-full text-left p-4 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-bold transition-colors" onclick="document.getElementById('report-modal').classList.add('hidden'); alertMsg('Report Submitted to Mods.')">Spam or Misleading</button>
+                    <button class="w-full text-left p-4 rounded-xl bg-gray-800 hover:bg-gray-700 text-red-500 font-bold transition-colors" onclick="document.getElementById('report-modal').classList.add('hidden'); alertMsg('Report Submitted to Mods.')">Inappropriate Content</button>
                 </div>
-                <button class="w-full p-3 rounded-xl border border-gray-600 text-white font-bold" onclick="document.getElementById('report-modal').classList.add('hidden')">Cancel</button>
+                <button class="w-full p-4 rounded-xl border border-gray-600 text-gray-300 font-bold hover:bg-gray-800 transition-colors" onclick="document.getElementById('report-modal').classList.add('hidden')">Cancel</button>
             </div>
         </div>
 
         <!-- Custom Alert Toast -->
-        <div id="custom-alert" class="hidden absolute top-24 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full text-sm z-[300] font-bold opacity-0 transition-opacity text-center whitespace-nowrap shadow-lg border border-gray-600"></div>
+        <div id="custom-alert" class="hidden absolute top-20 left-1/2 transform -translate-x-1/2 bg-black/90 text-white px-6 py-3 rounded-full text-sm z-[300] font-bold opacity-0 transition-opacity text-center whitespace-nowrap shadow-[0_0_20px_rgba(0,243,255,0.3)] border border-neonCyan/50 font-space tracking-wide backdrop-blur-md"></div>
 
-        <!-- Bottom Navigation -->
-        <nav id="bottom-nav" class="absolute bottom-0 left-0 w-full z-30 bg-black/90 border-t border-gray-900 pb-5 pt-3 px-6 backdrop-blur-xl">
-            <div class="flex justify-between items-center">
-                <div class="flex flex-col items-center cursor-pointer text-white nav-btn" onclick="switchTab('home')"><i class="fa-solid fa-house text-2xl"></i></div>
-                <div class="flex flex-col items-center cursor-pointer text-gray-500 nav-btn" onclick="switchTab('discover')"><i class="fa-solid fa-magnifying-glass text-2xl"></i></div>
-                <div class="flex flex-col items-center cursor-pointer text-gray-500" onclick="openCamera()"><i class="fa-regular fa-square-plus text-3xl text-white"></i></div>
-                <div class="flex flex-col items-center cursor-pointer text-gray-500 nav-btn" onclick="switchTab('chat')"><i class="fa-brands fa-facebook-messenger text-2xl"></i></div>
-                <div class="flex flex-col items-center cursor-pointer text-gray-500 nav-btn" onclick="switchTab('profile')"><i class="fa-regular fa-user text-2xl"></i></div>
+        <!-- Bottom Navigation (Futuristic) -->
+        <nav id="bottom-nav" class="absolute bottom-0 left-0 w-full z-30 bg-black/95 border-t border-cyberGray pb-5 pt-3 px-6 backdrop-blur-xl">
+            <div class="flex justify-between items-center relative">
+                <div class="flex flex-col items-center cursor-pointer text-neonCyan nav-btn transition-colors drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]" onclick="switchTab('home')"><i class="fa-solid fa-house text-2xl"></i></div>
+                <div class="flex flex-col items-center cursor-pointer text-gray-500 nav-btn transition-colors hover:text-white" onclick="switchTab('discover')"><i class="fa-solid fa-magnifying-glass text-2xl"></i></div>
+                
+                <!-- Center Add Button -->
+                <div class="flex flex-col items-center cursor-pointer text-gray-500 relative -top-3" onclick="openCamera()">
+                    <div class="bg-gradient-to-tr from-neonCyan to-neonPurple w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(188,19,254,0.4)] text-white hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-plus text-2xl"></i>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col items-center cursor-pointer text-gray-500 nav-btn transition-colors hover:text-white" onclick="switchTab('chat')"><i class="fa-brands fa-rocketchat text-2xl"></i></div>
+                <div class="flex flex-col items-center cursor-pointer text-gray-500 nav-btn transition-colors hover:text-white" onclick="switchTab('profile')"><i class="fa-regular fa-user text-2xl"></i></div>
             </div>
         </nav>
     </div>
 
     <script>
-        let dbUsers = JSON.parse(localStorage.getItem('ys_db_users')) || {};
-        let loggedInUser = localStorage.getItem('ys_logged_in') || null;
+        let dbUsers = JSON.parse(localStorage.getItem('ys_db_users_v2')) || {};
+        let loggedInUser = localStorage.getItem('ys_logged_in_v2') || null;
         let alertTimeout;
         let cameraStream = null;
-        let facingMode = 'user'; // Camera mode
+        let facingMode = 'user'; 
 
+        // Splash Screen Logic
         document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 document.getElementById('splash-screen').classList.add('opacity-0');
@@ -434,7 +623,7 @@
                     if(loggedInUser && dbUsers[loggedInUser]) { startApp(); } 
                     else { document.getElementById('auth-screen').classList.remove('hidden'); showAuthSection('auth-home'); }
                 }, 700);
-            }, 1500); 
+            }, 2000); 
         });
 
         // -- AUTH LOGIC --
@@ -447,33 +636,58 @@
             let u = document.getElementById('login-identifier').value.trim().toLowerCase();
             if(!u.startsWith('@')) u = '@' + u;
             const p = document.getElementById('login-password').value;
-            if(dbUsers[u] && dbUsers[u].password === p) { localStorage.setItem('ys_logged_in', u); loggedInUser = u; startApp(); } 
+            if(dbUsers[u] && dbUsers[u].password === p) { localStorage.setItem('ys_logged_in_v2', u); loggedInUser = u; startApp(); } 
             else { document.getElementById('login-error').classList.remove('hidden'); }
         }
         function validateContact() { tempSignup.contact = document.getElementById('signup-contact').value; showAuthSection('auth-signup-dob'); }
         function validateDOB() {
             const dob = document.getElementById('signup-date-input').value;
-            if(!dob) return;
+            if(!dob) { alertMsg("Enter Date of Birth"); return; }
             const bD = new Date(dob); const today = new Date();
             let age = today.getFullYear() - bD.getFullYear();
             if(age < 13) { document.getElementById('dob-error').classList.remove('hidden'); } 
             else { document.getElementById('dob-error').classList.add('hidden'); showAuthSection('auth-signup-step3'); }
         }
-        function validateNamePass() { tempSignup.name = document.getElementById('signup-name').value; tempSignup.password = document.getElementById('signup-password').value; showAuthSection('auth-signup-step4'); }
+        function validateNamePass() { 
+            tempSignup.name = document.getElementById('signup-name').value; 
+            tempSignup.password = document.getElementById('signup-password').value; 
+            if(tempSignup.name.length < 2 || tempSignup.password.length < 6) { alertMsg("Invalid Name or Password too short."); return;}
+            showAuthSection('auth-signup-step4'); 
+        }
         function finalizeSignup() {
             let u = '@' + document.getElementById('signup-username').value.replace('@','').toLowerCase();
-            if(u === '@') return;
-            dbUsers[u] = { username: u, name: tempSignup.name, password: tempSignup.password, avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${u}`, banner: 'https://images.unsplash.com/photo-1614729939124-03290b5609ce?q=80&w=1000', bio: 'New to YouShort 🚀', isPro: false, verified: false };
-            localStorage.setItem('ys_db_users', JSON.stringify(dbUsers)); localStorage.setItem('ys_logged_in', u); loggedInUser = u; startApp();
+            if(u === '@' || u.length < 3) { alertMsg("Invalid Handle"); return; }
+            
+            dbUsers[u] = { 
+                username: u, 
+                name: tempSignup.name, 
+                password: tempSignup.password, 
+                avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${u}&style=circle`, 
+                banner: 'https://images.unsplash.com/photo-1614729939124-03290b5609ce?q=80&w=1000', 
+                bio: 'Initiating Neural Link to YouShort ⚡', 
+                isPro: false, 
+                verified: false, 
+                aiEnabled: true // AI is ON by default
+            };
+            localStorage.setItem('ys_db_users_v2', JSON.stringify(dbUsers)); 
+            localStorage.setItem('ys_logged_in_v2', u); 
+            loggedInUser = u; 
+            startApp();
         }
 
         // -- CORE APP --
         function startApp() {
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('app').classList.remove('hidden');
-            updateProfileUI(); renderFeed(); switchTab('home');
+            
+            if(dbUsers[loggedInUser] && dbUsers[loggedInUser].aiEnabled === undefined) {
+                dbUsers[loggedInUser].aiEnabled = true;
+                localStorage.setItem('ys_db_users_v2', JSON.stringify(dbUsers));
+            }
+            
+            updateProfileUI(); updateAIToggleUI(); renderFeed(); switchTab('home');
         }
-        function logout() { localStorage.removeItem('ys_logged_in'); location.reload(); }
+        function logout() { localStorage.removeItem('ys_logged_in_v2'); location.reload(); }
 
         // -- PROFILE & SETTINGS --
         function updateProfileUI() {
@@ -488,6 +702,7 @@
             document.getElementById('profile-verified-badge').style.display = u.verified ? 'inline' : 'none';
         }
         
+        // Gallery / Image Upload Logic
         function updateProfileImage(event, type) {
             const file = event.target.files[0];
             if(file) {
@@ -495,8 +710,9 @@
                 reader.onload = function(e) {
                     if(type === 'avatar') { dbUsers[loggedInUser].avatar = e.target.result; } 
                     else { dbUsers[loggedInUser].banner = e.target.result; }
-                    localStorage.setItem('ys_db_users', JSON.stringify(dbUsers));
-                    updateProfileUI(); alertMsg("Photo Updated!");
+                    localStorage.setItem('ys_db_users_v2', JSON.stringify(dbUsers));
+                    updateProfileUI(); 
+                    alertMsg("Visuals Updated Successfully!");
                 };
                 reader.readAsDataURL(file);
             }
@@ -513,54 +729,135 @@
         function saveProfile() {
             dbUsers[loggedInUser].name = document.getElementById('edit-name').value;
             dbUsers[loggedInUser].bio = document.getElementById('edit-bio').value;
-            localStorage.setItem('ys_db_users', JSON.stringify(dbUsers));
-            updateProfileUI(); closeEditProfile(); alertMsg('Profile Saved!');
+            localStorage.setItem('ys_db_users_v2', JSON.stringify(dbUsers));
+            updateProfileUI(); closeEditProfile(); alertMsg('Identity Saved.');
         }
         function toggleAccountType() { 
             dbUsers[loggedInUser].isPro = !dbUsers[loggedInUser].isPro; 
-            localStorage.setItem('ys_db_users', JSON.stringify(dbUsers)); 
+            localStorage.setItem('ys_db_users_v2', JSON.stringify(dbUsers)); 
             updateProfileUI(); 
-            alertMsg(dbUsers[loggedInUser].isPro ? 'Pro Account Enabled' : 'Personal Account Enabled'); 
+            alertMsg(dbUsers[loggedInUser].isPro ? 'Pro Account Activated' : 'Personal Account Active'); 
         }
+        
+        // AI Toggle Logic (RESTORED)
+        function toggleAI() {
+            dbUsers[loggedInUser].aiEnabled = !dbUsers[loggedInUser].aiEnabled;
+            localStorage.setItem('ys_db_users_v2', JSON.stringify(dbUsers));
+            updateAIToggleUI();
+            alertMsg(dbUsers[loggedInUser].aiEnabled ? 'AI Auto-Reply: ONLINE' : 'AI Auto-Reply: OFFLINE');
+        }
+        function updateAIToggleUI() {
+            const btn = document.getElementById('ai-toggle-btn');
+            if(dbUsers[loggedInUser].aiEnabled) {
+                btn.classList.replace('bg-gray-700', 'bg-neonCyan');
+                btn.classList.add('shadow-[0_0_10px_rgba(0,243,255,0.5)]');
+                btn.firstElementChild.style.transform = 'translateX(20px)';
+            } else {
+                btn.classList.replace('bg-neonCyan', 'bg-gray-700');
+                btn.classList.remove('shadow-[0_0_10px_rgba(0,243,255,0.5)]');
+                btn.firstElementChild.style.transform = 'translateX(0)';
+            }
+        }
+
         function openFollowModal(type) {
             document.getElementById('follow-modal-title').innerText = type;
             document.getElementById('follow-list-modal').classList.remove('hidden');
         }
         function saveNewAge() {
             document.getElementById('age-edit-modal').classList.add('hidden');
-            alertMsg("Age Updated Successfully");
+            alertMsg("Genesis Date Updated.");
         }
 
-        // -- MODALS & VERIFICATION --
+        // -- MODALS & VERIFICATION (UPGRADED) --
         function openShareModal() { document.getElementById('share-modal').classList.remove('hidden'); }
         function closeShareModal() { document.getElementById('share-modal').classList.add('hidden'); }
+        
         function openVerificationModal() { document.getElementById('verification-modal').classList.remove('hidden'); }
         function closeVerificationModal() { document.getElementById('verification-modal').classList.add('hidden'); }
         function submitVerification() {
             const name = document.getElementById('verify-name').value;
-            if(name.length < 2) { alertMsg('Enter Full Name'); return; }
-            closeVerificationModal(); alertMsg('Application under review.');
-            setTimeout(() => { dbUsers[loggedInUser].verified = true; localStorage.setItem('ys_db_users', JSON.stringify(dbUsers)); updateProfileUI(); alertMsg('Congrats! You are now Verified!'); }, 4000);
+            if(name.length < 2) { alertMsg('Error: Full Name required in Step 1'); return; }
+            
+            closeVerificationModal(); 
+            alertMsg('Application Sent to Core Servers. Under Review.');
+            
+            // Dummy logic to auto-verify after 4 seconds for testing magic
+            setTimeout(() => { 
+                dbUsers[loggedInUser].verified = true; 
+                localStorage.setItem('ys_db_users_v2', JSON.stringify(dbUsers)); 
+                updateProfileUI(); 
+                alertMsg('VERIFICATION GRANTED! Blue Tick Added.'); 
+            }, 4000);
         }
 
-        // -- CHAT SYSTEM (WORKING UI) --
+        // -- CHAT SYSTEM (RESTORED WITH AI TYPING ANIMATION) --
         function openChatRoom(user, status) {
             document.getElementById('chat-room-name').innerText = user;
-            document.getElementById('chat-room-status').innerText = status;
-            document.getElementById('chat-room-avatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.replace('@','')}`;
-            document.getElementById('chat-messages-container').innerHTML = `<div class="self-start bg-gray-800 text-white p-3 rounded-2xl rounded-tl-none max-w-[75%] text-sm">Hey! What's up?</div>`;
+            document.getElementById('chat-room-status').innerHTML = `<i class="fa-solid fa-circle text-[6px] mr-1 animate-pulse"></i> ${status}`;
+            document.getElementById('chat-room-avatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.replace('@','')}&style=circle`;
+            
+            // Initial dummy message
+            document.getElementById('chat-messages-container').innerHTML = `
+                <div class="self-start bg-cyberGray border border-gray-700 text-white p-3 rounded-2xl rounded-tl-none max-w-[75%] text-sm shadow-md">
+                    System link established. ⚡
+                </div>`;
             document.getElementById('chat-room-screen').classList.remove('hidden');
         }
+
         function sendChatMessage() {
             const input = document.getElementById('chat-input-field');
-            if(input.value.trim() === '') return;
+            const msgText = input.value.trim();
+            if(msgText === '') return;
             const container = document.getElementById('chat-messages-container');
-            container.innerHTML += `<div class="self-end bg-neonCyan text-black p-3 rounded-2xl rounded-tr-none max-w-[75%] text-sm font-bold animate-[pop_0.2s_ease-out]">${input.value}</div>`;
+            
+            // User Message (Cyan)
+            container.innerHTML += `
+                <div class="self-end bg-neonCyan text-black p-3 rounded-2xl rounded-tr-none max-w-[75%] text-sm font-bold shadow-[0_0_10px_rgba(0,243,255,0.3)] animate-[pop_0.2s_ease-out]">
+                    ${msgText}
+                </div>`;
             input.value = '';
             container.scrollTop = container.scrollHeight;
+
+            // AI Auto Reply Logic (Futuristic)
+            if(dbUsers[loggedInUser].aiEnabled) {
+                // 1. Show Typing Indicator
+                const typingId = 'typing-' + Date.now();
+                setTimeout(() => {
+                    container.innerHTML += `
+                        <div id="${typingId}" class="self-start bg-cyberGray border border-gray-700 text-gray-400 px-4 py-3 rounded-2xl rounded-tl-none text-xs flex space-x-1 items-center">
+                            <span class="text-neonPurple font-bold mr-2"><i class="fa-solid fa-robot"></i> AI</span>
+                            <div class="w-1.5 h-1.5 bg-gray-500 rounded-full typing-dot"></div>
+                            <div class="w-1.5 h-1.5 bg-gray-500 rounded-full typing-dot"></div>
+                            <div class="w-1.5 h-1.5 bg-gray-500 rounded-full typing-dot"></div>
+                        </div>`;
+                    container.scrollTop = container.scrollHeight;
+                }, 400);
+
+                // 2. Replace with actual message
+                setTimeout(() => {
+                    const typingEl = document.getElementById(typingId);
+                    if(typingEl) typingEl.remove();
+                    
+                    const aiReplies = [
+                        "Data received. That's incredible! ⚡", 
+                        "Processing... I completely agree. 🤖", 
+                        "Node synced. Let's collab soon.", 
+                        "Wow! That's next level. 🔥", 
+                        "Affirmative. 💯"
+                    ];
+                    const reply = aiReplies[Math.floor(Math.random() * aiReplies.length)];
+                    
+                    container.innerHTML += `
+                        <div class="self-start bg-cyberGray border border-neonPurple/50 text-white p-3 rounded-2xl rounded-tl-none max-w-[75%] text-sm shadow-[0_0_15px_rgba(188,19,254,0.15)] animate-[pop_0.2s_ease-out]">
+                            <span class="text-[9px] font-space text-neonPurple block mb-1 uppercase tracking-widest"><i class="fa-solid fa-robot mr-1"></i>CyberBot Auto-Reply</span>
+                            ${reply}
+                        </div>`;
+                    container.scrollTop = container.scrollHeight;
+                }, 2000); // Wait 2 seconds simulating thinking
+            }
         }
 
-        // -- CAMERA SYSTEM (WORKING FLIP) --
+        // -- REAL CAMERA SYSTEM (RESTORED) --
         async function openCamera() {
             document.getElementById('camera-screen').classList.remove('hidden');
             try {
@@ -568,7 +865,7 @@
                 cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode }, audio: false });
                 document.getElementById('camera-preview').srcObject = cameraStream;
             } catch(e) {
-                alertMsg('Camera access blocked by phone.');
+                alertMsg('Access Denied: Camera hardware blocked.');
             }
         }
         function closeCamera() {
@@ -583,20 +880,23 @@
         // -- FEED & NAVIGATION --
         function toggleLike(iconElement) {
             if(iconElement.classList.contains('fa-regular')) {
+                // Like action (Heart gets filled, turns red, pops)
                 iconElement.classList.remove('fa-regular', 'text-white');
                 iconElement.classList.add('fa-solid', 'like-pop');
             } else {
+                // Unlike action
                 iconElement.classList.remove('fa-solid', 'like-pop');
                 iconElement.classList.add('fa-regular', 'text-white');
+                iconElement.style.filter = 'none'; // remove drop-shadow
             }
         }
 
         function toggleFeedType(type) {
             if(type === 'Following') {
-                document.getElementById('tab-following').className = "text-white cursor-pointer drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] border-b-2 border-white pb-1 transition-all";
+                document.getElementById('tab-following').className = "text-white cursor-pointer drop-shadow-[0_0_8px_rgba(0,243,255,0.8)] border-b-2 border-neonCyan pb-1 transition-all";
                 document.getElementById('tab-foryou').className = "text-gray-400 cursor-pointer transition-colors";
             } else {
-                document.getElementById('tab-foryou').className = "text-white cursor-pointer drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] border-b-2 border-white pb-1 transition-all";
+                document.getElementById('tab-foryou').className = "text-white cursor-pointer drop-shadow-[0_0_8px_rgba(0,243,255,0.8)] border-b-2 border-neonCyan pb-1 transition-all";
                 document.getElementById('tab-following').className = "text-gray-400 cursor-pointer transition-colors";
             }
         }
@@ -610,9 +910,18 @@
             else if(tab === 'chat') { document.getElementById('chat-list-screen').classList.remove('hidden'); }
             else if(tab === 'profile') { document.getElementById('profile-screen').classList.remove('hidden'); }
 
-            const navBtns = document.querySelectorAll('#bottom-nav .nav-btn i');
-            const map = { 'home': 0, 'discover': 1, 'chat': 2, 'profile': 3 };
-            let i = 0; navBtns.forEach((icon) => { icon.parentElement.className = `flex flex-col items-center cursor-pointer nav-btn ${map[tab] === i ? 'text-white' : 'text-gray-500'}`; i++; });
+            const navBtns = document.querySelectorAll('#bottom-nav .nav-btn');
+            const map = { 'home': 0, 'discover': 1, 'chat': 2, 'profile': 3 }; // Skipping center camera button
+            
+            navBtns.forEach((btn, index) => { 
+                if(map[tab] === index) {
+                    btn.classList.add('text-neonCyan', 'drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]');
+                    btn.classList.remove('text-gray-500');
+                } else {
+                    btn.classList.remove('text-neonCyan', 'drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]');
+                    btn.classList.add('text-gray-500');
+                }
+            });
         }
 
         function renderFeed() {
@@ -624,16 +933,21 @@
             
             vids.forEach(vid => {
                 const sec = document.createElement('section'); sec.className = 'snap-item w-full h-full relative bg-gray-950 flex justify-center items-center overflow-hidden';
-                sec.innerHTML = `<video class="absolute inset-0 w-full h-full object-cover z-0" src="${vid.url}" loop playsinline></video>
-                    <div class="absolute right-4 bottom-28 z-20 flex flex-col items-center space-y-6">
-                        <div class="w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-black mb-2"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${vid.creator}" class="w-full h-full object-cover"></div>
-                        <div class="flex flex-col items-center cursor-pointer" onclick="toggleLike(this.querySelector('i'))"><i class="fa-regular fa-heart text-3xl text-white transition-colors duration-200"></i></div>
-                        <div class="flex flex-col items-center cursor-pointer" onclick="document.getElementById('report-modal').classList.remove('hidden')"><i class="fa-solid fa-ellipsis-vertical text-2xl text-white drop-shadow-md"></i></div>
-                        <div class="flex flex-col items-center cursor-pointer" onclick="openShareModal()"><i class="fa-solid fa-share text-2xl text-white drop-shadow-md"></i></div>
+                sec.innerHTML = `
+                    <video class="absolute inset-0 w-full h-full object-cover z-0 opacity-90" src="${vid.url}" loop playsinline></video>
+                    
+                    <!-- Cyber Border -->
+                    <div class="absolute inset-0 pointer-events-none border-[1px] border-neonCyan/10 z-10 m-2 rounded-2xl"></div>
+
+                    <div class="absolute right-4 bottom-28 z-20 flex flex-col items-center space-y-7">
+                        <div class="w-12 h-12 rounded-full border-2 border-neonCyan overflow-hidden bg-black mb-2 shadow-[0_0_10px_rgba(0,243,255,0.5)]"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${vid.creator}&style=circle" class="w-full h-full object-cover"></div>
+                        <div class="flex flex-col items-center cursor-pointer" onclick="toggleLike(this.querySelector('i'))"><i class="fa-regular fa-heart text-3xl text-white transition-colors duration-200 drop-shadow-lg"></i></div>
+                        <div class="flex flex-col items-center cursor-pointer" onclick="document.getElementById('report-modal').classList.remove('hidden')"><i class="fa-solid fa-ellipsis-vertical text-2xl text-white drop-shadow-lg hover:text-neonCyan"></i></div>
+                        <div class="flex flex-col items-center cursor-pointer" onclick="openShareModal()"><i class="fa-solid fa-share text-2xl text-white drop-shadow-lg hover:text-neonCyan"></i></div>
                     </div>
                     <div class="absolute left-4 bottom-24 z-20 w-3/4 pr-4 pointer-events-none">
-                        <h2 class="text-white font-bold text-base mb-1.5">${vid.creator}</h2>
-                        <p class="text-white text-sm drop-shadow-md">${vid.desc}</p>
+                        <h2 class="text-white font-bold text-base mb-1.5 font-space tracking-wide drop-shadow-md">${vid.creator}</h2>
+                        <p class="text-white text-sm drop-shadow-md font-light">${vid.desc}</p>
                     </div>`;
                 const vEl = sec.querySelector('video'); sec.addEventListener('click', (e) => { if(!e.target.closest('.z-20')) { vEl.paused ? vEl.play() : vEl.pause(); } });
                 feed.appendChild(sec);
