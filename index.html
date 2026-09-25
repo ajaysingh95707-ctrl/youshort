@@ -302,7 +302,7 @@
                         <div class="flex items-center justify-between p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-800" onclick="toggleAccountType()">
                             <div class="flex items-center space-x-3"><i class="fa-solid fa-briefcase text-white w-5 text-center"></i><span class="text-white text-sm" id="btn-account-type-text">Switch to Professional Account</span></div>
                         </div>
-                        <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-800" onclick="alertMsg('Apply Form Opening...')">
+                        <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-800" onclick="openVerificationModal()">
                             <div class="flex items-center space-x-3"><i class="fa-solid fa-certificate text-instaBlue w-5 text-center"></i><span class="text-white text-sm">Request Verification (Blue Tick)</span></div>
                         </div>
                     </div>
@@ -319,6 +319,58 @@
                 </div>
 
                 <div class="pt-4 pb-8"><button onclick="logout()" class="w-full text-red-500 font-bold text-sm p-4 bg-gray-900 rounded-xl border border-red-500/20 text-center">Log out</button></div>
+            </div>
+        </main>
+
+        <!-- Blue Tick Verification Modal -->
+        <main id="verification-modal" class="hidden absolute inset-0 z-[70] bg-darkBg flex flex-col pb-10 overflow-y-auto">
+            <div class="flex items-center px-4 pb-4 border-b border-gray-800 bg-black/90 backdrop-blur-md sticky top-0 z-10" style="padding-top: max(2rem, var(--safe-area-inset-top));">
+                <button onclick="closeVerificationModal()" class="text-white text-2xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 class="text-xl font-bold text-white flex-1">Apply for Verification</h2>
+            </div>
+            <div class="p-4 space-y-6">
+                <p class="text-gray-400 text-sm">Verified accounts have a blue checkmark next to their names to show that YouShort has confirmed they are the real presence of the public figures or brands they represent.</p>
+
+                <div class="space-y-4">
+                    <h3 class="text-white font-bold text-lg border-b border-gray-800 pb-2">Step 1: Confirm authenticity</h3>
+                    <div>
+                        <label class="text-gray-500 text-xs font-bold mb-1 block">Full Name</label>
+                        <input type="text" id="verify-name" placeholder="E.g. Ajay Singh" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white text-sm outline-none focus:border-instaBlue">
+                    </div>
+                    <div>
+                        <label class="text-gray-500 text-xs font-bold mb-1 block">Document Type</label>
+                        <select class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white text-sm outline-none focus:border-instaBlue appearance-none">
+                            <option>Driver's License</option>
+                            <option>Passport</option>
+                            <option>National Identification Card</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button class="w-full py-3 rounded-lg border border-gray-600 text-white font-bold text-sm bg-gray-800 hover:bg-gray-700" onclick="alertMsg('File Manager Opened')">Choose File</button>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-white font-bold text-lg border-b border-gray-800 pb-2">Step 2: Confirm notability</h3>
+                    <div>
+                        <label class="text-gray-500 text-xs font-bold mb-1 block">Category</label>
+                        <select class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white text-sm outline-none focus:border-instaBlue appearance-none">
+                            <option>News/Media</option>
+                            <option>Sports</option>
+                            <option>Government and Politics</option>
+                            <option>Music</option>
+                            <option>Fashion</option>
+                            <option>Entertainment</option>
+                            <option>Digital creator/Blogger/Influencer</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-gray-500 text-xs font-bold mb-1 block">Country/Region</label>
+                        <input type="text" placeholder="E.g. India" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white text-sm outline-none focus:border-instaBlue">
+                    </div>
+                </div>
+
+                <button onclick="submitVerification()" class="w-full py-3.5 rounded-full bg-instaBlue text-white font-bold mt-4 shadow-[0_0_15px_rgba(0,149,246,0.4)] mb-8">Submit Application</button>
             </div>
         </main>
 
@@ -536,6 +588,20 @@
                 if(newP && newP.length >= 6) { dbUsers[loggedInUser].password = newP; localStorage.setItem('ys_db_users', JSON.stringify(dbUsers)); alertMsg("Password Changed Successfully"); }
                 else { alertMsg("Password too short"); }
             } else if(oldP) { alertMsg("Incorrect Current Password"); }
+        }
+
+        // -- VERIFICATION MODAL LOGIC --
+        function openVerificationModal() {
+            document.getElementById('verification-modal').classList.remove('hidden');
+        }
+        function closeVerificationModal() {
+            document.getElementById('verification-modal').classList.add('hidden');
+        }
+        function submitVerification() {
+            const name = document.getElementById('verify-name').value.trim();
+            if(!name) { alertMsg('Please enter your full name first.'); return; }
+            closeVerificationModal();
+            alertMsg('Application Submitted! Status: Pending Review.');
         }
 
         function openFollowModal(title) { document.getElementById('follow-list-title').innerText = title; document.getElementById('follow-list-modal').classList.remove('hidden'); }
